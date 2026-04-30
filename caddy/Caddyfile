@@ -25,93 +25,225 @@
 # ─── titan-local services ──────────────────────────────────────
 
 http://posterizarr.harker.systems {
-	reverse_proxy 127.0.0.1:8000
+	reverse_proxy 127.0.0.1:8000 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://jellyseerr.harker.systems {
-	reverse_proxy 127.0.0.1:5055
+	reverse_proxy 127.0.0.1:5055 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://dozzle.harker.systems {
-	reverse_proxy 127.0.0.1:8889
+	reverse_proxy 127.0.0.1:8889 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://pihole.harker.systems {
-	reverse_proxy 127.0.0.1:8090
+	reverse_proxy 127.0.0.1:8090 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://nextcloud.harker.systems {
-	reverse_proxy 127.0.0.1:8083
+	reverse_proxy 127.0.0.1:8083 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://forge.harker.systems {
-	reverse_proxy 127.0.0.1:4174
+	reverse_proxy 127.0.0.1:4174 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://ollama.harker.systems {
-	reverse_proxy 127.0.0.1:8080
+	reverse_proxy 127.0.0.1:8080 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://nitter.harker.systems {
-	reverse_proxy 127.0.0.1:8060
+	reverse_proxy 127.0.0.1:8060 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://iptv.harker.systems {
-	reverse_proxy 127.0.0.1:9110
+	reverse_proxy 127.0.0.1:9110 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://epg.harker.systems {
-	reverse_proxy 127.0.0.1:3000
+	reverse_proxy 127.0.0.1:3000 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://atlas.harker.systems {
-	reverse_proxy 127.0.0.1:8888
+	reverse_proxy 127.0.0.1:8888 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 # ─── zeus: servarr (CT 105) ────────────────────────────────────
 
 http://radarr.harker.systems {
-	reverse_proxy 192.168.10.29:7878
+	reverse_proxy 192.168.10.29:7878 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://sonarr.harker.systems {
-	reverse_proxy 192.168.10.29:8989
+	reverse_proxy 192.168.10.29:8989 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://lidarr.harker.systems {
-	reverse_proxy 192.168.10.29:8686
+	reverse_proxy 192.168.10.29:8686 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://readarr.harker.systems {
-	reverse_proxy 192.168.10.29:8787
+	reverse_proxy 192.168.10.29:8787 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://prowlarr.harker.systems {
-	reverse_proxy 192.168.10.29:9696
+	reverse_proxy 192.168.10.29:9696 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://bazarr.harker.systems {
-	reverse_proxy 192.168.10.29:6767
+	reverse_proxy 192.168.10.29:6767 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://lazylibrarian.harker.systems {
-	reverse_proxy 192.168.10.29:5399
+	reverse_proxy 192.168.10.29:5399 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://overseerr.harker.systems {
-	reverse_proxy 192.168.10.29:5055
+	reverse_proxy 192.168.10.29:5055 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://tautulli.harker.systems {
-	reverse_proxy 192.168.10.29:8181
+	reverse_proxy 192.168.10.29:8181 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://qbittorrent.harker.systems {
-	reverse_proxy 192.168.10.29:8080
+	reverse_proxy 192.168.10.29:8080 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://nzbget.harker.systems {
-	reverse_proxy 192.168.10.29:6789
+	reverse_proxy 192.168.10.29:6789 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://portainer.harker.systems {
@@ -123,15 +255,33 @@ http://portainer.harker.systems {
 # ─── zeus: SIEM (CT 103) ───────────────────────────────────────
 
 http://copilot.harker.systems {
-	reverse_proxy 192.168.10.31:80
+	reverse_proxy 192.168.10.31:80 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://graylog.harker.systems {
-	reverse_proxy 192.168.10.31:9000
+	reverse_proxy 192.168.10.31:9000 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://grafana.harker.systems {
-	reverse_proxy 192.168.10.31:3000
+	reverse_proxy 192.168.10.31:3000 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://wazuh.harker.systems {
@@ -143,11 +293,23 @@ http://wazuh.harker.systems {
 # ─── zeus: OSINT (CT 201) ──────────────────────────────────────
 
 http://searxng.harker.systems {
-	reverse_proxy 192.168.10.201:8082
+	reverse_proxy 192.168.10.201:8082 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://spiderfoot.harker.systems {
-	reverse_proxy 192.168.10.201:5001
+	reverse_proxy 192.168.10.201:5001 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://nessus.harker.systems {
@@ -159,11 +321,23 @@ http://nessus.harker.systems {
 # ─── zeus: infra ───────────────────────────────────────────────
 
 http://gitea.harker.systems {
-	reverse_proxy 192.168.10.25:3000
+	reverse_proxy 192.168.10.25:3000 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://cosmos.harker.systems {
-	reverse_proxy 192.168.10.60:80
+	reverse_proxy 192.168.10.60:80 {
+		lb_try_duration 4s
+		lb_try_interval 250ms
+		transport http {
+			dial_timeout 8s
+		}
+	}
 }
 
 http://omada.harker.systems {
