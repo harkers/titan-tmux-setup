@@ -27,6 +27,27 @@ tmux ls
 tmux kill-session -t plex
 ```
 
+## One session per project
+
+Run [`start-all-sessions.sh`](start-all-sessions.sh) on titan to spin up one detached session per `/home/stu/projects/*/` folder. Idempotent — re-run it any time without disturbing existing sessions.
+
+```bash
+ssh titan 'bash /home/stu/projects/tmux/start-all-sessions.sh'
+
+# Then on next attach
+ssh titan
+tmux a -t plex            # or radarr, kometa, caddy, cloudflare, etc.
+# inside tmux: Ctrl-b s   for interactive session picker
+```
+
+Each session opens already `cd`'d into its project. The script picks an appropriate intro command per project type:
+
+- **git repos** — runs `git status -sb` so you see uncommitted work right away
+- **docker projects** — runs `docker compose ps` to show container state
+- **everything else** — runs `ls -la`
+
+To switch between sessions without leaving tmux: prefix + `s` (interactive picker), or `tmux switch-client -t <name>` from inside.
+
 ## Keystrokes inside tmux
 
 The **prefix** is `Ctrl-b` (or `Ctrl-a` with this config). Press it, release, then press the next key.
