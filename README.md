@@ -17,8 +17,11 @@ What lives where on titan:
 | [`tmux/`](tmux/) | `~/.tmux.conf` for sane defaults + persistent sessions |
 | [`vnc/`](vnc/) | TigerVNC + XFCE remote desktop on `:1` (port 5901) |
 | [`caddy/`](caddy/) | Reverse proxy for `*.harker.systems` — fronted by Cloudflare Access |
+| [`cloudflare/`](cloudflare/) | API scripts to add/list/remove `*.harker.systems` services + bootstrap history |
 | [`posterizarr/`](posterizarr/) | docker-compose, auto-recovery cycle script, Plex DB poison-repair script |
 | [`cron/`](cron/) | All `/etc/cron.d/` entries that keep the homelab healthy |
+
+Each folder has its own `README.md` and is structured as a self-contained project that can be rsync'd to `/home/stu/projects/<name>/` on titan.
 
 ## Quick recovery / new-machine bootstrap
 
