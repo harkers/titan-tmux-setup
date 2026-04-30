@@ -1,103 +1,179 @@
 # Caddy on titan — single source of truth for *.harker.systems routing.
 #
-# Public traffic enters via Cloudflare Tunnel (`sso-home-lab` on titan).
-# Cloudflare Access enforces auth at the edge; Caddy trusts the CF JWT
-# header and routes by Host. TLS terminates at Cloudflare's edge — Caddy
-# is HTTP-only on port 80.
+# Public traffic enters via Cloudflare Tunnel `harker.systems` (8ba2b285...).
+# Cloudflare Access is enforced at the tunnel ingress level via audTag —
+# Caddy receives only authenticated requests for protected services.
+# TLS terminates at Cloudflare's edge — Caddy is HTTP-only on port 80.
 #
 # Deploy: docker compose up -d
 # Reload: docker exec caddy caddy reload --config /etc/caddy/Caddyfile
 
 {
-    auto_https off
-    servers {
-        trusted_proxies cloudflare
-    }
+	auto_https off
 }
 
-# ─── snippets ──────────────────────────────────────────────────
-
-# Defense-in-depth: refuse anything that didn't come through CF Access.
-# Drop this from any service whose CF Access app is set to "bypass".
-(cf_access_required) {
-    @no_jwt not header Cf-Access-Authenticated-User-Email *
-    respond @no_jwt 403
-}
-
-# Self-signed upstream — used by Proxmox, Wazuh, Portainer, Nessus, Omada.
+# ─── snippet: self-signed upstream ─────────────────────────────
+# Used for upstreams with self-signed certs (Proxmox, Wazuh,
+# Portainer, Nessus, Omada).
 (self_signed_https) {
-    transport http {
-        tls
-        tls_insecure_skip_verify
-    }
+	transport http {
+		tls
+		tls_insecure_skip_verify
+	}
 }
 
-# ─── titan services ────────────────────────────────────────────
+# ─── titan-local services ──────────────────────────────────────
 
-posterizarr.harker.systems  { import cf_access_required; reverse_proxy 127.0.0.1:8000 }
-jellyseerr.harker.systems   { reverse_proxy 127.0.0.1:5055 }
-dozzle.harker.systems       { import cf_access_required; reverse_proxy 127.0.0.1:8889 }
-pihole.harker.systems       { import cf_access_required; reverse_proxy 127.0.0.1:8090 }
-nextcloud.harker.systems    { import cf_access_required; reverse_proxy 127.0.0.1:8083 }
-forge.harker.systems        { import cf_access_required; reverse_proxy 127.0.0.1:4174 }
-ollama.harker.systems       { import cf_access_required; reverse_proxy 127.0.0.1:8080 }
-nitter.harker.systems       { reverse_proxy 127.0.0.1:8060 }
-iptv.harker.systems         { import cf_access_required; reverse_proxy 127.0.0.1:9110 }
-epg.harker.systems          { import cf_access_required; reverse_proxy 127.0.0.1:3000 }
-atlas.harker.systems        { import cf_access_required; reverse_proxy 127.0.0.1:8888 }
-
-# ─── zeus: Proxmox + servarr (CT 105) ──────────────────────────
-
-proxmox.harker.systems {
-    import cf_access_required
-    reverse_proxy https://192.168.10.150:8006 { import self_signed_https }
+http://posterizarr.harker.systems {
+	reverse_proxy 127.0.0.1:8000
 }
 
-radarr.harker.systems        { import cf_access_required; reverse_proxy 192.168.10.29:7878 }
-sonarr.harker.systems        { import cf_access_required; reverse_proxy 192.168.10.29:8989 }
-lidarr.harker.systems        { import cf_access_required; reverse_proxy 192.168.10.29:8686 }
-readarr.harker.systems       { import cf_access_required; reverse_proxy 192.168.10.29:8787 }
-prowlarr.harker.systems      { import cf_access_required; reverse_proxy 192.168.10.29:9696 }
-bazarr.harker.systems        { import cf_access_required; reverse_proxy 192.168.10.29:6767 }
-lazylibrarian.harker.systems { import cf_access_required; reverse_proxy 192.168.10.29:5399 }
-overseerr.harker.systems     { reverse_proxy 192.168.10.29:5055 }
-tautulli.harker.systems      { import cf_access_required; reverse_proxy 192.168.10.29:8181 }
-audiobookshelf.harker.systems{ reverse_proxy 192.168.10.29:13378 }
-qbittorrent.harker.systems   { import cf_access_required; reverse_proxy 192.168.10.29:8080 }
-nzbget.harker.systems        { import cf_access_required; reverse_proxy 192.168.10.29:6789 }
+http://jellyseerr.harker.systems {
+	reverse_proxy 127.0.0.1:5055
+}
 
-portainer.harker.systems {
-    import cf_access_required
-    reverse_proxy https://192.168.10.29:9443 { import self_signed_https }
+http://dozzle.harker.systems {
+	reverse_proxy 127.0.0.1:8889
+}
+
+http://pihole.harker.systems {
+	reverse_proxy 127.0.0.1:8090
+}
+
+http://nextcloud.harker.systems {
+	reverse_proxy 127.0.0.1:8083
+}
+
+http://forge.harker.systems {
+	reverse_proxy 127.0.0.1:4174
+}
+
+http://ollama.harker.systems {
+	reverse_proxy 127.0.0.1:8080
+}
+
+http://nitter.harker.systems {
+	reverse_proxy 127.0.0.1:8060
+}
+
+http://iptv.harker.systems {
+	reverse_proxy 127.0.0.1:9110
+}
+
+http://epg.harker.systems {
+	reverse_proxy 127.0.0.1:3000
+}
+
+http://atlas.harker.systems {
+	reverse_proxy 127.0.0.1:8888
+}
+
+# ─── zeus: servarr (CT 105) ────────────────────────────────────
+
+http://radarr.harker.systems {
+	reverse_proxy 192.168.10.29:7878
+}
+
+http://sonarr.harker.systems {
+	reverse_proxy 192.168.10.29:8989
+}
+
+http://lidarr.harker.systems {
+	reverse_proxy 192.168.10.29:8686
+}
+
+http://readarr.harker.systems {
+	reverse_proxy 192.168.10.29:8787
+}
+
+http://prowlarr.harker.systems {
+	reverse_proxy 192.168.10.29:9696
+}
+
+http://bazarr.harker.systems {
+	reverse_proxy 192.168.10.29:6767
+}
+
+http://lazylibrarian.harker.systems {
+	reverse_proxy 192.168.10.29:5399
+}
+
+http://overseerr.harker.systems {
+	reverse_proxy 192.168.10.29:5055
+}
+
+http://tautulli.harker.systems {
+	reverse_proxy 192.168.10.29:8181
+}
+
+http://qbittorrent.harker.systems {
+	reverse_proxy 192.168.10.29:8080
+}
+
+http://nzbget.harker.systems {
+	reverse_proxy 192.168.10.29:6789
+}
+
+http://portainer.harker.systems {
+	reverse_proxy https://192.168.10.29:9443 {
+		import self_signed_https
+	}
 }
 
 # ─── zeus: SIEM (CT 103) ───────────────────────────────────────
 
-copilot.harker.systems  { import cf_access_required; reverse_proxy 192.168.10.31:80 }
-graylog.harker.systems  { import cf_access_required; reverse_proxy 192.168.10.31:9000 }
-grafana.harker.systems  { import cf_access_required; reverse_proxy 192.168.10.31:3000 }
+http://copilot.harker.systems {
+	reverse_proxy 192.168.10.31:80
+}
 
-wazuh.harker.systems {
-    import cf_access_required
-    reverse_proxy https://192.168.10.31:5601 { import self_signed_https }
+http://graylog.harker.systems {
+	reverse_proxy 192.168.10.31:9000
+}
+
+http://grafana.harker.systems {
+	reverse_proxy 192.168.10.31:3000
+}
+
+http://wazuh.harker.systems {
+	reverse_proxy https://192.168.10.31:5601 {
+		import self_signed_https
+	}
 }
 
 # ─── zeus: OSINT (CT 201) ──────────────────────────────────────
 
-searxng.harker.systems    { import cf_access_required; reverse_proxy 192.168.10.201:8082 }
-spiderfoot.harker.systems { import cf_access_required; reverse_proxy 192.168.10.201:5001 }
+http://searxng.harker.systems {
+	reverse_proxy 192.168.10.201:8082
+}
 
-nessus.harker.systems {
-    import cf_access_required
-    reverse_proxy https://192.168.10.201:8834 { import self_signed_https }
+http://spiderfoot.harker.systems {
+	reverse_proxy 192.168.10.201:5001
+}
+
+http://nessus.harker.systems {
+	reverse_proxy https://192.168.10.201:8834 {
+		import self_signed_https
+	}
 }
 
 # ─── zeus: infra ───────────────────────────────────────────────
 
-gitea.harker.systems  { import cf_access_required; reverse_proxy 192.168.10.25:3000 }
-cosmos.harker.systems { import cf_access_required; reverse_proxy 192.168.10.60:80 }
+http://gitea.harker.systems {
+	reverse_proxy 192.168.10.25:3000
+}
 
-omada.harker.systems {
-    import cf_access_required
-    reverse_proxy https://192.168.10.200:8043 { import self_signed_https }
+http://cosmos.harker.systems {
+	reverse_proxy 192.168.10.60:80
+}
+
+http://omada.harker.systems {
+	reverse_proxy https://192.168.10.200:8043 {
+		import self_signed_https
+	}
+}
+
+http://proxmox.harker.systems {
+	reverse_proxy https://192.168.10.150:8006 {
+		import self_signed_https
+	}
 }
