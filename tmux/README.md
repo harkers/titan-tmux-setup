@@ -27,6 +27,17 @@ tmux ls
 tmux kill-session -t plex
 ```
 
+## Connect via mosh on flaky links
+
+For travel, replace `ssh` with `mosh` — it survives roaming between cellular and hotel WiFi, and reconnects without re-authenticating. Installed on Mac (`brew install mosh`) and titan (`apt install mosh`).
+
+```bash
+mosh titan                   # opens a shell on titan, survives sleep/roaming
+mosh titan -- tmux a -t plex # attach to a tmux session via mosh
+```
+
+mosh uses UDP 60000-61000 to titan's tailnet IP. If Tailscale itself is blocked (some hotels, some countries), fall back to `cloudflared access ssh` (Phase 5.B in the [Travel Mode plan](https://www.notion.so/352bb54b0db681d18b54f9d0d835ed9e)) — different layer, complementary.
+
 ## One session per project
 
 Run [`start-all-sessions.sh`](start-all-sessions.sh) on titan to spin up one detached session per `/home/stu/projects/*/` folder. Idempotent — re-run it any time without disturbing existing sessions.
