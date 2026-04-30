@@ -16,6 +16,7 @@ What lives where on titan:
 |---|---|
 | [`tmux/`](tmux/) | `~/.tmux.conf` for sane defaults + persistent sessions |
 | [`vnc/`](vnc/) | TigerVNC + XFCE remote desktop on `:1` (port 5901) |
+| [`caddy/`](caddy/) | Reverse proxy for `*.harker.systems` — fronted by Cloudflare Access |
 | [`posterizarr/`](posterizarr/) | docker-compose, auto-recovery cycle script, Plex DB poison-repair script |
 | [`cron/`](cron/) | All `/etc/cron.d/` entries that keep the homelab healthy |
 
