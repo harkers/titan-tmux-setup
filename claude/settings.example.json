@@ -1,0 +1,8 @@
+{
+  "_comment": "Drop-in snippet for ~/.claude/settings.json. Merge the statusLine block into your existing settings — don't replace the whole file. Path inside `command` is OS-specific.",
+
+  "statusLine": {
+    "type": "command",
+    "command": "sh /Users/stu/.claude/statusline-command.sh"
+  }
+}

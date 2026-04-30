@@ -18,6 +18,9 @@ What lives where on titan:
 | [`vnc/`](vnc/) | TigerVNC + XFCE remote desktop on `:1` (port 5901) |
 | [`caddy/`](caddy/) | Reverse proxy for `*.harker.systems` — fronted by Cloudflare Access |
 | [`cloudflare/`](cloudflare/) | API scripts to add/list/remove `*.harker.systems` services + bootstrap history |
+| [`claude/`](claude/) | Claude Code status-line script + setup snippet (the versioned slice of `~/.claude/`) |
+| [`british-cinema/`](british-cinema/) | Deploy + serve helpers for the static catalogue at titan.tail1a2109.ts.net/british-cinema/ |
+| [`travel-mode/`](travel-mode/) | `travel-mode on/off/status` bandwidth saver for trips |
 | [`posterizarr/`](posterizarr/) | docker-compose, auto-recovery cycle script, Plex DB poison-repair script |
 | [`cron/`](cron/) | All `/etc/cron.d/` entries that keep the homelab healthy |
 
