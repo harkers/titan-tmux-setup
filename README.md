@@ -242,3 +242,35 @@ tmux a              # attach to running session, or `tmux new -s plex`
 ```
 
 See [`tmux/README.md`](tmux/) for the full keystroke reference.
+
+## Staying online while abroad
+
+The full plan — pre-flight checklist, Caddy + Cloudflare Access gateway, resilience layer, break-glass paths — lives in Notion: [Travel Mode — Deep Remote-Access Plan](https://www.notion.so/352bb54b0db681d18b54f9d0d835ed9e).
+
+Pocket runbook (the bare minimum from a hotel):
+
+```bash
+# 1. Confirm tailnet reach
+tailscale status | grep -E 'titan|zeus|forge'
+
+# 2. Attach to long-running tmux on titan
+ssh titan 'tmux a -t plex'   # or `tmux new -s plex` first time
+
+# 3. If SSH fails, jump via zeus over LAN
+ssh -J zeus stu@192.168.10.80
+
+# 4. Browser-only? Hit any *.harker.systems URL → CF Access OTP via email
+#    (after Phase 1 of the Notion plan is deployed)
+```
+
+Break-glass when the normal path is blocked:
+
+| Symptom | Fix |
+|---|---|
+| Tailscale UDP blocked at hotel | `tailscale up --tun=userspace-networking` to force DERP relay |
+| Tailscale fully blocked | `cloudflared access ssh --hostname ssh.harker.systems` (Phase 5.B) |
+| Titan unreachable, zeus alive | SSH zeus, `ssh stu@192.168.10.80`, then `sudo systemctl restart` whatever broke |
+| Plex won't stream | check [Plex Pass relay status](https://app.plex.tv/desktop/#!/settings/server/<machine-id>/manage/remote-access) — falls back automatically |
+| iPhone lost | use Latitude bootstrap kit (Phase 0.3) — Tailscale auth-key pre-stored, recovery codes via Vaultwarden |
+
+Status of plan deployment is tracked in the Notion page's Section 6 status table.
