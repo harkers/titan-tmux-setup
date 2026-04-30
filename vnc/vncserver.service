@@ -1,0 +1,12 @@
+[Unit]
+Description=TigerVNC server (XFCE) on display :1
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/tigervncserver :1 -localhost no -geometry 1920x1080 -fg
+ExecStop=/usr/bin/tigervncserver -kill :1
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

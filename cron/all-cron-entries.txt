@@ -1,0 +1,10 @@
+# Auto-restart Plex+Posterizarr every 4 hours until 14K posters built (then self-disables).
+# Cycle script self-checks: skips if Posterizarr is making progress.
+0 */4 * * * stu /home/stu/projects/posterizarr/cycle.sh
+# Repair Plex's recurring channels-duplicate XML corruption every 2h.
+# MediaAnalysis re-poisons certain items; this strips the offending JSON keys.
+0 */2 * * * stu /home/stu/projects/posterizarr/repair_plex_xml.sh
+# Weekly Sunday 03:00 - refresh TMDb-derived ribbon labels (plex-overlay v1.1)
+SHELL=/bin/bash
+PATH=/usr/bin:/bin
+0 3 * * 0 stu /home/stu/projects/plex-overlay/.venv/bin/python /home/stu/projects/plex-overlay/scripts/sync_ribbon_labels.py --config /home/stu/projects/plex-overlay/config.yml >> /home/stu/projects/plex-overlay/state/logs/sync_ribbons.log 2>&1

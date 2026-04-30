@@ -1,0 +1,18 @@
+services:
+  posterizarr:
+    image: ghcr.io/fscorrupt/posterizarr:latest
+    container_name: posterizarr
+    restart: unless-stopped
+    network_mode: host
+    user: "1000:1000"
+    environment:
+      - TZ=Europe/London
+      - UMASK=002
+      - TERM=xterm
+      - RUN_TIME=23:00
+    volumes:
+      - /home/stu/projects/posterizarr/config:/config:rw
+      - /home/stu/projects/posterizarr/assets:/assets:rw
+      - /home/stu/projects/posterizarr/assetsbackup:/assetsbackup:rw
+      - /home/stu/projects/posterizarr/manualassets:/manualassets:rw
+      - /home/stu/projects/posterizarr/watcher:/watcher:rw
