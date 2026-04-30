@@ -29,29 +29,55 @@ Each folder has its own `README.md` and is structured as a self-contained projec
 ## Quick recovery / new-machine bootstrap
 
 ```bash
+# Clone next to where projects will live
 git clone https://github.com/harkers/titan-tmux-setup.git ~/titan-tmux-setup
+mkdir -p ~/projects ~/bin
 
-# tmux
-cp ~/titan-tmux-setup/tmux/.tmux.conf ~/
+# Each folder rsyncs into its target on titan, preserving live state.
+for d in caddy cloudflare claude cron tmux vnc travel-mode british-cinema; do
+  rsync -a "~/titan-tmux-setup/$d/" "~/projects/$d/"
+done
 
-# VNC (after installing xfce4 + tigervnc-standalone-server + tightvncpasswd)
+# tmux conf
+cp ~/projects/tmux/.tmux.conf ~/
+
+# Spin up one detached tmux session per project folder
+bash ~/projects/tmux/start-all-sessions.sh
+
+# travel-mode bin symlink
+ln -sfn ~/projects/travel-mode/travel-mode.sh ~/bin/travel-mode
+
+# Caddy (after Docker)
+cd ~/projects/caddy && docker compose up -d
+
+# Cloudflare scripts: drop the API token into ~/projects/cloudflare/.env (chmod 600)
+# (see cloudflare/README.md for the required scopes)
+
+# Claude Code status line + slash commands
+ln -sfn ~/projects/claude/statusline-command.sh ~/.claude/statusline-command.sh
+mkdir -p ~/.claude/commands
+for f in ~/projects/claude/commands/*.md; do
+  [ "$(basename $f)" = "README.md" ] && continue
+  ln -sfn "$f" "$HOME/.claude/commands/$(basename $f)"
+done
+# Then merge the statusLine block from claude/settings.example.json into ~/.claude/settings.json
+
+# VNC (after apt install xfce4 tigervnc-standalone-server tightvncpasswd)
 mkdir -p ~/.vnc ~/.config/systemd/user
-cp ~/titan-tmux-setup/vnc/{xstartup,config} ~/.vnc/
-cp ~/titan-tmux-setup/vnc/vncserver.service ~/.config/systemd/user/
+cp ~/projects/vnc/{xstartup,config} ~/.vnc/
+cp ~/projects/vnc/vncserver.service ~/.config/systemd/user/
 echo -e 'PASSWORD\nPASSWORD\nn' | tightvncpasswd -f > ~/.vnc/passwd
 chmod 600 ~/.vnc/passwd
 sudo loginctl enable-linger $USER
 systemctl --user enable --now vncserver.service
 
 # Posterizarr (after Docker + image pulled)
-mkdir -p /home/stu/projects/posterizarr/{config,assets,assetsbackup,manualassets,watcher}
-cp ~/titan-tmux-setup/posterizarr/docker-compose.yml /home/stu/projects/posterizarr/
-cp ~/titan-tmux-setup/posterizarr/{cycle.sh,repair_plex_xml.sh} /home/stu/projects/posterizarr/
-chmod +x /home/stu/projects/posterizarr/{cycle.sh,repair_plex_xml.sh}
-# Edit config.json with your TMDb v4 token, Fanart key, Plex token
+mkdir -p ~/projects/posterizarr/{config,assets,assetsbackup,manualassets,watcher}
+chmod +x ~/projects/posterizarr/{cycle.sh,repair_plex_xml.sh}
+# Edit config.json with TMDb v4 token, Fanart key, Plex token
 
 # Cron
-sudo cp ~/titan-tmux-setup/cron/* /etc/cron.d/   # adjust paths first
+sudo cp ~/projects/cron/* /etc/cron.d/   # adjust paths first
 ```
 
 ## Services running on titan
@@ -249,6 +275,39 @@ tmux a              # attach to running session, or `tmux new -s plex`
 ```
 
 See [`tmux/README.md`](tmux/) for the full keystroke reference.
+
+## Claude Code integration
+
+[`claude/`](claude/) versions the parts of `~/.claude/` worth syncing across machines. After cloning + symlinking (see bootstrap above), every Claude Code session on the host automatically gets:
+
+### Status line
+
+```
+[caddy] ~/projects/caddy/src/foo  Sonnet 4.6 ctx:34%
+```
+
+`[project]` is the folder directly under `Projects/` or `projects/`, then the path with `$HOME` collapsed, the active model, and context-used percentage. Pure POSIX `sh`, runs identically on Mac and Linux. Source: [`claude/statusline-command.sh`](claude/statusline-command.sh).
+
+### Slash commands
+
+Six commands wired to homelab workflows in [`claude/commands/`](claude/commands/):
+
+| Command | What |
+|---|---|
+| `/homelab-status` | Tight 5-line health check across titan (sessions/docker/disk/Caddy/Plex) |
+| `/deploy-cinema` | Rebuild + redeploy the British Cinema static site |
+| `/cf-add <subdomain> [--bypass]` | Add a new `*.harker.systems` service end-to-end (CF API + Caddy + reload) |
+| `/cf-list` | Show every hostname currently routed by the harker.systems tunnel |
+| `/travel-on` | Activate travel mode on titan + print manual checklist |
+| `/travel-off` | Restore paused workloads on titan and verify |
+
+Add new commands by dropping `name.md` into `claude/commands/` (with `description` and `allowed-tools` frontmatter) — the symlinks already in place mean they're picked up immediately.
+
+### Top-level CLAUDE.md (project map)
+
+[`claude/projects-claude-md-titan.md`](claude/projects-claude-md-titan.md) installs as `/home/stu/projects/CLAUDE.md` on titan. Claude Code walks up the directory tree finding `CLAUDE.md` files, so any session in any subfolder gets the project map (folder list + sizes + per-folder context links) loaded alongside the per-folder context. Mac equivalent at [`claude/projects-claude-md-mac.md`](claude/projects-claude-md-mac.md) → `~/Projects/CLAUDE.md`.
+
+Per-folder `CLAUDE.md` files — one in each project folder under this repo and on titan — give Claude Code instant context about purpose, key files, common commands, and gotchas without re-deriving them from code. Live at e.g. [`caddy/CLAUDE.md`](caddy/CLAUDE.md), [`cloudflare/CLAUDE.md`](cloudflare/CLAUDE.md), [`travel-mode/CLAUDE.md`](travel-mode/CLAUDE.md), etc.
 
 ## Staying online while abroad
 
