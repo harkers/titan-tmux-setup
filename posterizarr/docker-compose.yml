@@ -9,7 +9,9 @@ services:
       - TZ=Europe/London
       - UMASK=002
       - TERM=xterm
-      - RUN_TIME=23:00
+      # Holiday burn schedule 2026-05-01 — every 3h to push through 15K backlog
+      # while no one is streaming. Revert to plain "23:00" once first-run finishes.
+      - RUN_TIME=23:00,02:00,05:00,08:00,11:00,14:00,17:00,20:00
     volumes:
       - /home/stu/projects/posterizarr/config:/config:rw
       - /home/stu/projects/posterizarr/assets:/assets:rw
