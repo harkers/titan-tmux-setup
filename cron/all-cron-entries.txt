@@ -16,4 +16,5 @@
 0 6 * * *    /home/stu/projects/british-cinema/deploy.sh >> /home/stu/projects/british-cinema/deploy.log 2>&1
 0 9 * * *    /home/stu/projects/plex-overlay/.venv/bin/plex-overlay --config /home/stu/projects/plex-overlay/config.yml run >> /home/stu/projects/plex-overlay/state/cron.log 2>&1
 30 12 * * *  /home/stu/projects/kometa/run-kometa.sh >> /home/stu/projects/kometa/cron-midday.log 2>&1
+*/5 * * * *  /home/stu/projects/plex-tools/bin/with-env /home/stu/projects/plex-tools/bin/radarr-import-incremental-scan.py >> /home/stu/projects/plex-tools/incremental-scan.log 2>&1
 # ──────────────────────────────────────────────────────────────────────
