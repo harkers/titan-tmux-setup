@@ -1,11 +1,15 @@
-# tmux config + session fleet on titan
+# tmux config + session fleet (titan + Mac)
 
-Persistent terminal sessions for all `/home/stu/projects/*` folders. Lives at `/home/stu/projects/tmux/`.
+Persistent terminal sessions for all project folders.
+- On titan: lives at `/home/stu/projects/tmux/` (rsync'd from this repo).
+- On Mac: lives at `/Users/stu/projects/tmux-setup/tmux/` (this repo, in place).
 
 ## What's deployed
 
-- `~/.tmux.conf` on titan (Ctrl-b OR Ctrl-a prefix, mouse on, vim-style pane navigation, 256-colour, 50K history)
+- `~/.tmux.conf` — symlink (Mac) or copy (titan) of this repo's `.tmux.conf` (Ctrl-b OR Ctrl-a prefix, mouse on, vim-style pane navigation, 256-colour, 50K history, tpm + resurrect + continuum)
 - `start-all-sessions.sh` — creates one detached session per project folder, idempotent
+- `start-mac.sh` — Mac wrapper that sets `PROJECTS_DIR=~/projects` + Homebrew `PATH`, then calls `start-all-sessions.sh`
+- `dev.harkers.tmux-sessions.plist` — Mac LaunchAgent that runs `start-mac.sh` at login; installed at `~/Library/LaunchAgents/`
 
 ## Session conventions
 
@@ -17,8 +21,11 @@ Persistent terminal sessions for all `/home/stu/projects/*` folders. Lives at `/
 ## Common tasks
 
 ```bash
-# refresh sessions (adds any new /home/stu/projects/* folders)
+# refresh sessions on titan
 bash /home/stu/projects/tmux/start-all-sessions.sh
+
+# refresh sessions on Mac
+bash ~/projects/tmux-setup/tmux/start-mac.sh
 
 # attach
 tmux a -t plex

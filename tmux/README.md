@@ -1,13 +1,37 @@
-# tmux on titan
+# tmux (titan + Mac)
 
-Persistent terminal sessions that survive SSH disconnects. Use this when you SSH from a travelling laptop and want work to continue when you close the lid.
+Persistent terminal sessions that survive SSH disconnects (titan use case) and survive logout/reboot (Mac use case via LaunchAgent + tmux-continuum).
 
-## Install
+## Install — titan (Debian)
 
 ```bash
 sudo apt-get install tmux
 cp .tmux.conf ~/.tmux.conf
 ```
+
+## Install — Mac (auto-restart on login)
+
+```bash
+brew install tmux mosh
+ln -sfn ~/projects/tmux-setup/tmux/.tmux.conf ~/.tmux.conf
+git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+~/.tmux/plugins/tpm/bin/install_plugins   # tmux-resurrect + tmux-continuum
+```
+
+Register the LaunchAgent so all `~/projects/*` sessions come back on every login. The plist is versioned at [`dev.harkers.tmux-sessions.plist`](dev.harkers.tmux-sessions.plist) — it invokes [`start-mac.sh`](start-mac.sh), which sets `PROJECTS_DIR=~/projects` and Homebrew's `PATH` before calling [`start-all-sessions.sh`](start-all-sessions.sh).
+
+```bash
+cp ~/projects/tmux-setup/tmux/dev.harkers.tmux-sessions.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/dev.harkers.tmux-sessions.plist
+```
+
+Run any time on demand (idempotent — existing sessions are left alone):
+
+```bash
+bash ~/projects/tmux-setup/tmux/start-mac.sh
+```
+
+Logs at `~/Library/Logs/tmux-sessions.log`. tmux-continuum saves pane layouts every 15 min, tmux-resurrect restores them when the server starts again, so even after `tmux kill-server` or a reboot the working state is preserved.
 
 ## Daily commands
 
@@ -40,14 +64,18 @@ mosh uses UDP 60000-61000 to titan's tailnet IP. If Tailscale itself is blocked 
 
 ## One session per project
 
-Run [`start-all-sessions.sh`](start-all-sessions.sh) on titan to spin up one detached session per `/home/stu/projects/*/` folder. Idempotent — re-run it any time without disturbing existing sessions.
+Run [`start-all-sessions.sh`](start-all-sessions.sh) to spin up one detached session per project folder. Idempotent — re-run any time without disturbing existing sessions.
 
 ```bash
+# titan (default PROJECTS_DIR=/home/stu/projects)
 ssh titan 'bash /home/stu/projects/tmux/start-all-sessions.sh'
 
-# Then on next attach
-ssh titan
-tmux a -t plex            # or radarr, kometa, caddy, cloudflare, etc.
+# Mac (wrapper sets PROJECTS_DIR=~/projects and Homebrew PATH)
+bash ~/projects/tmux-setup/tmux/start-mac.sh
+
+# Then attach
+tmux a -t plex            # titan: radarr, kometa, caddy, cloudflare, etc.
+                          # Mac:   plex-tools, media-server-mac, video-studio, etc.
 # inside tmux: Ctrl-b s   for interactive session picker
 ```
 
