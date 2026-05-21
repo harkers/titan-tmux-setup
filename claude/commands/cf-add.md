@@ -9,10 +9,10 @@ Add a new service to `*.harker.systems`. Two steps — Cloudflare side first, th
 **Step 1 — Cloudflare:** run the API helper from this repo (it adds the CNAME and the tunnel ingress rule):
 
 ```bash
-cd /Users/stu/Projects/titan-tmux-setup/cloudflare && python3 add_service.py $ARGUMENTS
+cd /Users/stu/Projects/tmux-setup/cloudflare && python3 add_service.py $ARGUMENTS
 ```
 
-**Step 2 — Caddy:** ask the user what backend `<subdomain>.harker.systems` should reverse-proxy to (e.g. `127.0.0.1:8000` for a titan-local service or `192.168.10.29:7878` for a zeus service). Then append the standard site block to `/Users/stu/Projects/titan-tmux-setup/caddy/Caddyfile`:
+**Step 2 — Caddy:** ask the user what backend `<subdomain>.harker.systems` should reverse-proxy to (e.g. `127.0.0.1:8000` for a titan-local service or `192.168.10.29:7878` for a zeus service). Then append the standard site block to `/Users/stu/Projects/tmux-setup/caddy/Caddyfile`:
 
 ```caddyfile
 http://<subdomain>.harker.systems {
@@ -29,7 +29,7 @@ http://<subdomain>.harker.systems {
 Insert it in the right section (titan-local / zeus servarr / SIEM / OSINT / infra). Then rsync to titan and reload Caddy:
 
 ```bash
-rsync -av /Users/stu/Projects/titan-tmux-setup/caddy/Caddyfile titan:/home/stu/projects/caddy/Caddyfile
+rsync -av /Users/stu/Projects/tmux-setup/caddy/Caddyfile titan:/home/stu/projects/caddy/Caddyfile
 ssh titan 'docker exec caddy caddy reload --config /etc/caddy/Caddyfile'
 ```
 

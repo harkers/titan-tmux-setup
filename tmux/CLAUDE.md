@@ -49,4 +49,4 @@ Add to the `SKIP=` env in the script if more data-only folders appear.
 
 ## Cross-references
 
-- [Travel workflow in titan-tmux-setup README](../README.md#travel-workflow)
+- [Travel workflow in tmux-setup README](../README.md#travel-workflow)

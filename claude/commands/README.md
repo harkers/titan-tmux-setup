@@ -19,7 +19,7 @@ User-scope (works in any directory you launch Claude Code from):
 
 ```bash
 # Mac
-ln -sfn /Users/stu/Projects/titan-tmux-setup/claude/commands/* ~/.claude/commands/
+ln -sfn /Users/stu/Projects/tmux-setup/claude/commands/* ~/.claude/commands/
 
 # titan
 ssh titan 'ln -sfn /home/stu/projects/claude/commands/* ~/.claude/commands/'
@@ -38,6 +38,6 @@ Symlinks beat copies because edits to the repo flow through automatically — no
 
 ## Why version these instead of just keeping them in `~/.claude/commands/`?
 
-- They reference repo-relative paths (`/Users/stu/Projects/titan-tmux-setup/cloudflare/list_services.py` etc.). The repo IS the source of truth.
+- They reference repo-relative paths (`/Users/stu/Projects/tmux-setup/cloudflare/list_services.py` etc.). The repo IS the source of truth.
 - A new machine setup gets all your commands by cloning the repo + running the symlink line.
 - They evolve alongside the scripts they call. If `add_service.py` grows a new flag, the slash command's `argument-hint` should follow.

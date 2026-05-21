@@ -50,5 +50,5 @@ You should see `[caddy] ~/projects/caddy  Sonnet 4.6` (dimmed).
 
 ## Cross-references
 
-- [titan-tmux-setup top-level README](../README.md) — fits next to caddy/cloudflare/tmux/vnc/cron/posterizarr/travel-mode/british-cinema as another self-contained project folder
+- [tmux-setup top-level README](../README.md) — fits next to caddy/cloudflare/tmux/vnc/cron/posterizarr/travel-mode/british-cinema as another self-contained project folder
 - Per-project `CLAUDE.md` files (in every `/home/stu/projects/*/`) — what gets loaded *into* the session when you cd there

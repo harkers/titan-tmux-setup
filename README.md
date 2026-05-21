@@ -1,4 +1,4 @@
-# titan-tmux-setup
+# tmux-setup
 
 Homelab config + setup notes for `titan` (Debian 12 server, 64 GB RAM, 16 core).
 
@@ -30,12 +30,12 @@ Each folder has its own `README.md` and is structured as a self-contained projec
 
 ```bash
 # Clone next to where projects will live
-git clone https://github.com/harkers/titan-tmux-setup.git ~/titan-tmux-setup
+git clone https://github.com/harkers/tmux-setup.git ~/tmux-setup
 mkdir -p ~/projects ~/bin
 
 # Each folder rsyncs into its target on titan, preserving live state.
 for d in caddy cloudflare claude cron tmux vnc travel-mode british-cinema; do
-  rsync -a "~/titan-tmux-setup/$d/" "~/projects/$d/"
+  rsync -a "~/tmux-setup/$d/" "~/projects/$d/"
 done
 
 # tmux conf

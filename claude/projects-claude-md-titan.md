@@ -54,5 +54,5 @@ Slash commands available in any Claude Code session here: `/homelab-status`, `/c
 
 ## Cross-references
 
-- Repo: [github.com/harkers/titan-tmux-setup](https://github.com/harkers/titan-tmux-setup)
+- Repo: [github.com/harkers/tmux-setup](https://github.com/harkers/tmux-setup)
 - Notion: [Travel Mode plan](https://www.notion.so/352bb54b0db681d18b54f9d0d835ed9e), [Implementation Log](https://www.notion.so/352bb54b0db681038fd2d217846fd510), [British Cinema](https://www.notion.so/352bb54b0db6815ea748f83ae7d3257a)

@@ -10,7 +10,7 @@ This file lives at `/Users/stu/Projects/CLAUDE.md` on the Mac. Claude Code walks
 | `fidelex/` | Fidelex master brand — parent workspace for privacy-ops product strategy | `fidelex` | [📘 Fidelex — Products](https://www.notion.so/33fbb54b0db681079cdcc7d3b6938bff) |
 | `orderededge-agents/` | Lens Auditor + Python Agent SDK + FastMCP for cert-authenticated M365 audits | `orderededge-agents` | (linked from OE Platform) |
 | `py-plex/` | Homelab provisioning + OSINT intelligence platform (Proxmox CTs, Docker stacks, NordVPN gluetun) | `py-plex` | [🏗️ Platform & Infrastructure](https://www.notion.so/339bb54b0db6815fb5dbe05b12c40409) |
-| `titan-tmux-setup/` | Homelab config repo (Caddy, Cloudflare scripts, tmux, VNC, travel-mode, Claude config). Origin of slash commands + status line. | — | (this repo) |
+| `tmux-setup/` | Homelab config repo (Caddy, Cloudflare scripts, tmux, VNC, travel-mode, Claude config). Origin of slash commands + status line. | — | (this repo) |
 
 ## Quick connect to titan
 
@@ -31,7 +31,7 @@ tmux a -t <project>      # caddy / cloudflare / plex / kometa / etc.
 
 ## Slash commands (work from any project here)
 
-`/homelab-status` `/cf-list` `/cf-add` `/deploy-cinema` `/travel-on` `/travel-off` — all defined in [`titan-tmux-setup/claude/commands/`](titan-tmux-setup/claude/commands/) and symlinked into `~/.claude/commands/`.
+`/homelab-status` `/cf-list` `/cf-add` `/deploy-cinema` `/travel-on` `/travel-off` — all defined in [`tmux-setup/claude/commands/`](tmux-setup/claude/commands/) and symlinked into `~/.claude/commands/`.
 
 ## Brand + tooling rules (from global `~/.claude/CLAUDE.md`)
 
@@ -43,5 +43,5 @@ tmux a -t <project>      # caddy / cloudflare / plex / kometa / etc.
 ## Cross-references
 
 - Global rules + Notion workspace map: [`~/.claude/CLAUDE.md`](~/.claude/CLAUDE.md)
-- Homelab tooling repo: [titan-tmux-setup](https://github.com/harkers/titan-tmux-setup)
+- Homelab tooling repo: [tmux-setup](https://github.com/harkers/tmux-setup)
 - titan project map: `/home/stu/projects/CLAUDE.md` (visible after `mosh titan`)

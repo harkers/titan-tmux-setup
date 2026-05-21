@@ -49,7 +49,7 @@ This file documents the deploy. The full plan, threat model, sequencing, and bre
 
 ```bash
 # On macbook
-rsync -av /Users/stu/Projects/titan-tmux-setup/caddy/ titan:/home/stu/projects/caddy/
+rsync -av /Users/stu/Projects/tmux-setup/caddy/ titan:/home/stu/projects/caddy/
 
 # On titan
 cd /home/stu/projects/caddy

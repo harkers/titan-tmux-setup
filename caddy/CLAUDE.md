@@ -1,6 +1,6 @@
 # Caddy on titan
 
-Reverse proxy for `*.harker.systems`. Lives at `/home/stu/projects/caddy/`. Mirror in [titan-tmux-setup/caddy/](https://github.com/harkers/titan-tmux-setup/tree/main/caddy).
+Reverse proxy for `*.harker.systems`. Lives at `/home/stu/projects/caddy/`. Mirror in [tmux-setup/caddy/](https://github.com/harkers/tmux-setup/tree/main/caddy).
 
 ## Architecture
 

@@ -1,6 +1,6 @@
 # Cloudflare management for harker.systems
 
-Idempotent Python scripts (stdlib only) that manage the `harker.systems` zone, tunnel ingress, and Access apps. Lives at `/home/stu/projects/cloudflare/`. Mirror in [titan-tmux-setup/cloudflare/](https://github.com/harkers/titan-tmux-setup/tree/main/cloudflare).
+Idempotent Python scripts (stdlib only) that manage the `harker.systems` zone, tunnel ingress, and Access apps. Lives at `/home/stu/projects/cloudflare/`. Mirror in [tmux-setup/cloudflare/](https://github.com/harkers/tmux-setup/tree/main/cloudflare).
 
 ## Critical IDs (in `cf_common.py`)
 
