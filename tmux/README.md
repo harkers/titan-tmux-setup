@@ -9,13 +9,56 @@ sudo apt-get install tmux
 cp .tmux.conf ~/.tmux.conf
 ```
 
+## Install — any Linux host (zeus, nuc, cosmos, ...)
+
+[`bootstrap-host.sh`](bootstrap-host.sh) is a single idempotent script that installs `tmux + mosh + fzf + git`, clones this repo to `~/tmux-setup`, symlinks `~/.tmux.conf`, installs tpm + all plugins, appends the SSH-agent shell snippet to `~/.bashrc` / `~/.zshrc`, and (if `~/projects/` exists) starts one detached session per folder.
+
+Stream it over SSH on a fresh host:
+
+```bash
+ssh zeus 'bash -s' < ~/projects/tmux-setup/tmux/bootstrap-host.sh
+ssh nuc 'bash -s' < ~/projects/tmux-setup/tmux/bootstrap-host.sh
+ssh cosmos 'bash -s' < ~/projects/tmux-setup/tmux/bootstrap-host.sh
+```
+
+Or, once the repo is cloned on the host:
+
+```bash
+ssh zeus 'bash ~/tmux-setup/tmux/bootstrap-host.sh'
+```
+
+Re-running is safe — package install is a no-op, the conf symlink is refreshed, tpm reinstalls cleanly, and existing tmux sessions are skipped. The shell-rc snippet is marker-guarded so it's only appended once.
+
+Env knobs:
+
+| Var | Purpose |
+|---|---|
+| `SKIP_SESSIONS=1` | Install + configure only; don't spawn project sessions |
+| `REPO_DIR=~/foo` | Override clone target (default `~/tmux-setup`) |
+| `REPO_URL=...` | Use a fork/mirror instead of `harkers/tmux-setup` |
+
+The script auto-detects apt / dnf / pacman / apk, and runs without `sudo` when invoked as root (e.g. on Proxmox LXC containers like `root@zeus`).
+
 ## Install — Mac (auto-restart on login)
 
 ```bash
-brew install tmux mosh
+brew install tmux mosh fzf
 ln -sfn ~/projects/tmux-setup/tmux/.tmux.conf ~/.tmux.conf
 git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-~/.tmux/plugins/tpm/bin/install_plugins   # tmux-resurrect + tmux-continuum
+~/.tmux/plugins/tpm/bin/install_plugins   # resurrect, continuum, yank, prefix-highlight, battery
+```
+
+Append the SSH-agent socket snippet to `~/.zshrc` so agent forwarding survives detach/reattach:
+
+```bash
+cat >> ~/.zshrc <<'EOF'
+
+# tmux-setup: stable SSH agent socket — survives tmux detach/reattach
+if [ -n "${SSH_AUTH_SOCK:-}" ] && [ -S "$SSH_AUTH_SOCK" ] && [ "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent.sock" ]; then
+    ln -sf "$SSH_AUTH_SOCK" "$HOME/.ssh/agent.sock"
+fi
+[ -S "$HOME/.ssh/agent.sock" ] && export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+EOF
 ```
 
 Register the LaunchAgent so all `~/projects/*` sessions come back on every login. The plist is versioned at [`dev.harkers.tmux-sessions.plist`](dev.harkers.tmux-sessions.plist) — it invokes [`start-mac.sh`](start-mac.sh), which sets `PROJECTS_DIR=~/projects` and Homebrew's `PATH` before calling [`start-all-sessions.sh`](start-all-sessions.sh).
@@ -140,3 +183,18 @@ tmux a    # exactly where you left off
 - `renumber-windows on` — windows stay sequentially numbered when you close one
 - Vim-style pane navigation (`hjkl`)
 - `|` / `-` for splits (more intuitive than `%` / `"`)
+
+## Plugins (via tpm)
+
+| Plugin | What it gives you |
+|---|---|
+| **tmux-resurrect** | `prefix + Ctrl-s` saves session state to disk; `prefix + Ctrl-r` restores. Pane contents included. |
+| **tmux-continuum** | Auto-saves every 15 min, auto-restores on next tmux server start. Survives reboot. |
+| **tmux-yank** | Selections (mouse drag or copy-mode) auto-copy to the **system clipboard** — `pbcopy` on Mac, `xclip`/`xsel` on Linux. |
+| **tmux-prefix-highlight** | Visible `PREFIX` indicator in the status bar while the prefix key is held — no more wondering whether the keystroke landed. |
+| **tmux-battery** | Battery icon + percentage in the status bar. No-op on hosts without a battery. |
+
+## Extras beyond defaults
+
+- **Prefix + T** — fzf-driven popup session picker (centred floating window, lists every other session). Faster than `prefix + s`. Requires `fzf` installed.
+- **Stable SSH agent socket** — panes use `$HOME/.ssh/agent.sock`, kept fresh by the shell-rc snippet appended by the bootstrap script (or copy-paste from the Mac install section above). Agent-forwarded `git push`, `ssh`, etc. keep working across tmux detach/reattach.

@@ -6,10 +6,12 @@ Persistent terminal sessions for all project folders.
 
 ## What's deployed
 
-- `~/.tmux.conf` — symlink (Mac) or copy (titan) of this repo's `.tmux.conf` (Ctrl-b OR Ctrl-a prefix, mouse on, vim-style pane navigation, 256-colour, 50K history, tpm + resurrect + continuum)
+- `~/.tmux.conf` — symlink (Mac) or copy (titan) of this repo's `.tmux.conf` (Ctrl-b OR Ctrl-a prefix, mouse on, vim-style pane navigation, 256-colour, 50K history)
+- tpm plugins: tmux-resurrect, tmux-continuum, tmux-yank (system clipboard), tmux-prefix-highlight, tmux-battery
 - `start-all-sessions.sh` — creates one detached session per project folder, idempotent
 - `start-mac.sh` — Mac wrapper that sets `PROJECTS_DIR=~/projects` + Homebrew `PATH`, then calls `start-all-sessions.sh`
 - `dev.harkers.tmux-sessions.plist` — Mac LaunchAgent that runs `start-mac.sh` at login; installed at `~/Library/LaunchAgents/`
+- `bootstrap-host.sh` — one-shot installer for Linux hosts (zeus / nuc / cosmos / any apt-dnf-pacman-apk box). Installs `tmux + mosh + fzf + git`, clones the repo to `~/tmux-setup`, links `.tmux.conf`, installs tpm + plugins, appends the SSH-agent shell snippet, and (if `~/projects/` exists) starts sessions. Stream over SSH: `ssh <host> 'bash -s' < bootstrap-host.sh`.
 
 ## Session conventions
 
